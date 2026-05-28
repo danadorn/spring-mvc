@@ -12,10 +12,9 @@ public class CoffeeRepository {
 
     @Bean
     public List<Coffee> beanCoffee() {
-        Coffee coffee1 = new Coffee(1, "Americano", "50%");
-        Coffee coffee2 = new Coffee(2, "Ice Latte", "No ice");
-        Coffee coffee3 = new Coffee(3, "Milk Tea", "No ice");
-
+        Coffee coffee1 = new Coffee(1, "Americano", "50%",1.5);
+        Coffee coffee2 = new Coffee(2, "Ice Latte", "No ice",1.5);
+        Coffee coffee3 = new Coffee(3, "Milk Tea", "No ice",1.5);
         return Arrays.asList(coffee1, coffee2, coffee3);
     }
 }
