@@ -7,6 +7,7 @@ import co.istad.spring_mvc.dto.UpdateCoffeeRequest;
 import co.istad.spring_mvc.service.CoffeeService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,6 +60,14 @@ public class CoffeeController {
             @Valid @RequestBody UpdateCoffeeRequest updateCoffeeRequest
             ){
         return coffeeService.updateCoffeeById(id, updateCoffeeRequest);
+    }
+
+
+    //delete coffee by id
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteCoffeeById(@PathVariable Integer id) {
+        coffeeService.deleteCoffeeById(id);
     }
 
 

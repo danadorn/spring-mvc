@@ -15,4 +15,5 @@ public interface CoffeeService {
     List<CoffeeResponse> searchByName(String name,Double price);
     CoffeeResponse createCoffee(CreateCoffeeRequest createCoffeeRequest);
     CoffeeResponse updateCoffeeById(Integer id, UpdateCoffeeRequest updateCoffeeRequest);
+    void deleteCoffeeById(Integer id);
 }

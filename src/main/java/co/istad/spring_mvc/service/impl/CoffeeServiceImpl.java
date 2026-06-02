@@ -33,9 +33,6 @@ public class CoffeeServiceImpl implements CoffeeService {
 //                ).toList();
 //    }
 
-
-
-
     @Override
     public List<Coffee> getCoffee() {
         return coffeeRepository.getCoffees();
@@ -86,7 +83,6 @@ public class CoffeeServiceImpl implements CoffeeService {
 
         coffeeBean.add(coffee);
 
-
         return new CoffeeResponse(coffee.getId(), coffee.getName(), coffee.getDescription());
     }
 
@@ -105,7 +101,19 @@ public class CoffeeServiceImpl implements CoffeeService {
                 })
                 .map(newCoffee -> new CoffeeResponse(newCoffee.getId(), newCoffee.getName(), newCoffee.getDescription()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Coffee ID = %d doesnt exist", id)));
-
-
     }
+
+    @Override
+    public void deleteCoffeeById(Integer id) {
+        Coffee coffee = coffeeRepository.getCoffees()
+                .stream()
+                .filter(c -> c.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Coffee ID = %d doesn't exist", id)
+                ));
+        coffeeBean.remove(coffee);
+    }
+
 }
