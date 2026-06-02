@@ -3,6 +3,7 @@ package co.istad.spring_mvc.controller;
 import co.istad.spring_mvc.domain.Coffee;
 import co.istad.spring_mvc.dto.CoffeeResponse;
 import co.istad.spring_mvc.dto.CreateCoffeeRequest;
+import co.istad.spring_mvc.dto.UpdateCoffeeRequest;
 import co.istad.spring_mvc.service.CoffeeService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,14 @@ public class CoffeeController {
     public CoffeeResponse createCoffee(@Valid @RequestBody CreateCoffeeRequest createCoffeeRequest) {
 
         return coffeeService.createCoffee(createCoffeeRequest);
+    }
+
+    @PutMapping("/{id}")
+    public CoffeeResponse updateCoffeeById(
+            @PathVariable Integer id,
+            @Valid @RequestBody UpdateCoffeeRequest updateCoffeeRequest
+            ){
+        return coffeeService.updateCoffeeById(id, updateCoffeeRequest);
     }
 
 

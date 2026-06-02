@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -59,5 +60,16 @@ public class AppException {
         return ErrorResponse.builder()
                 .status(false)
                 .code(HttpStatus.BAD_REQUEST.value()).message("Bad Request").errors(fieldErrorResponses).build();
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<?> handleServiceException(ResponseStatusException exception){
+        ErrorResponse<?> errorResponse = ErrorResponse.builder()
+                .status(false)
+                .code(exception.getStatusCode().value())
+                .message("Service error")
+                .errors(exception.getReason())
+                .build();
+        return ResponseEntity.status(exception.getStatusCode()).body(errorResponse);
     }
 }

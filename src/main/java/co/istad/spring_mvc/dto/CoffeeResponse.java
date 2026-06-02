@@ -6,9 +6,9 @@ import lombok.Setter;
 
 
 public record CoffeeResponse (
+        Integer id,
         String name,
-        String description,
-        Double price
+        String description
 ){
 
 }
