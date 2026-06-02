@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.lang.reflect.Method;
@@ -22,23 +23,41 @@ import java.util.Map;
 @RestControllerAdvice
 public class AppException {
 
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex) {
+//        log.error("Validation Exception");
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("message", "Input a positive valid number mate!");
+//
+//        List<FieldError> fieldErrors = ex.getBindingResult()
+//                .getFieldErrors()
+//                .stream()
+//                .map(fe -> new FieldError(
+//                        fe.getField(),
+//                        fe.getDefaultMessage() != null ? fe.getDefaultMessage() : "Invalid value",
+//                        fe.getRejectedValue() == null ? "null" : fe.getRejectedValue().toString()
+//                ))
+//                .toList();
+//
+//        response.put("errors", fieldErrors);
+//        return ResponseEntity.badRequest().body(response);
+//    }
+//
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex) {
+    public ErrorResponse<?> handleValidationException(MethodArgumentNotValidException exception) {
         log.error("Validation Exception");
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "Input a positive valid number mate!");
 
-        List<FieldError> fieldErrors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(fe -> new FieldError(
-                        fe.getField(),
-                        fe.getDefaultMessage() != null ? fe.getDefaultMessage() : "Invalid value",
-                        fe.getRejectedValue() == null ? "null" : fe.getRejectedValue().toString()
-                ))
-                .toList();
+        List<FieldErrorResponse> fieldErrorResponses = new ArrayList<>();
 
-        response.put("errors", fieldErrors);
-        return ResponseEntity.badRequest().body(response);
+        exception.getFieldErrors()
+                .forEach(fieldError -> {FieldErrorResponse field = FieldErrorResponse.builder()
+                .field(fieldError.getField()).message(fieldError.getDefaultMessage()).build();
+                    fieldErrorResponses.add(field);
+                });
+        return ErrorResponse.builder()
+                .status(false)
+                .code(HttpStatus.BAD_REQUEST.value()).message("Bad Request").errors(fieldErrorResponses).build();
     }
 }
